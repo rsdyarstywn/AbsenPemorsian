@@ -1,75 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Absensi Divisi</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Kehadiran Divisi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; padding: 20px; max-width: 400px; margin: auto; background-color: #f4f4f9;}
-        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h3 { text-align: center; color: #333; }
-        select, button { width: 100%; padding: 12px; margin-top: 15px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box;}
-        button { background: #007bff; color: white; border: none; cursor: pointer; font-weight: bold; margin-top: 20px;}
-        button:hover { background: #0056b3; }
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 400px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .header h2 {
+            margin: 0;
+            color: #1a1a1a;
+            font-size: 22px;
+        }
+        .header p {
+            margin: 5px 0 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 14px;
+        }
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+            background-color: #fcfcfc;
+        }
+        select:focus {
+            border-color: #007bff;
+        }
+        
+        /* Gaya untuk tombol status (Radio Chips) */
+        .status-options {
+            display: flex;
+            gap: 10px;
+        }
+        .status-options input[type="radio"] {
+            display: none; /* Sembunyikan radio button asli */
+        }
+        .status-btn {
+            flex: 1;
+            padding: 12px 0;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #555;
+            transition: all 0.2s;
+            background-color: #fff;
+        }
+        /* Warna saat dipilih */
+        #status-hadir:checked + .status-btn { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
+        #status-izin:checked + .status-btn { background: #fff8e1; border-color: #ffc107; color: #f57f17; }
+        #status-sakit:checked + .status-btn { background: #ffebee; border-color: #f44336; color: #c62828; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        .submit-btn:disabled {
+            background-color: #a0c4ff;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h3>Absensi Kehadiran</h3>
-        <select id="nama">
-            <option value="">-- Pilih Nama --</option>
-            <option value="Bulqis">Bulqis</option>
-            <option value="Kiranti Maulidya Muntasir">Kiranti Maulidya Muntasir</option>
-            <option value="Muh. Syafiq">Muh. Syafiq</option>
-            <option value="Nuraeni">Nuraeni</option>
-            <option value="Nur Aisyah">Nur Aisyah</option>
-            <option value="Nur Ziqrah">Nur Ziqrah</option>
-            <option value="Rusdi Aristiawan">Rusdi Aristiawan</option>
-            <option value="Siti Jumasiah">Siti Jumasiah</option>
-            <option value="Siska">Siska</option>
-        </select>
-        <select id="status">
-            <option value="Hadir">Hadir</option>
-            <option value="Izin">Izin</option>
-            <option value="Sakit">Sakit</option>
-        </select>
-        <button id="btnSubmit" onclick="kirimAbsen()">Kirim Kehadiran</button>
+
+    <div class="card">
+        <div class="header">
+            <h2>Absensi Harian</h2>
+            <p>Silakan isi kehadiran Anda hari ini</p>
+        </div>
+
+        <div class="form-group">
+            <label for="nama">Nama Lengkap</label>
+            <select id="nama">
+                <option value="" disabled selected>-- Ketuk untuk memilih nama --</option>
+                <option value="Anggota 1">Anggota 1</option>
+                <option value="Anggota 2">Anggota 2</option>
+                <option value="Anggota 3">Anggota 3</option>
+                <option value="Anggota 4">Anggota 4</option>
+                <option value="Anggota 5">Anggota 5</option>
+                <option value="Anggota 6">Anggota 6</option>
+                <option value="Anggota 7">Anggota 7</option>
+                <option value="Anggota 8">Anggota 8</option>
+                <option value="Pemimpin Divisi">Pemimpin Divisi</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Status Kehadiran</label>
+            <div class="status-options">
+                <input type="radio" id="status-hadir" name="status" value="Hadir">
+                <label for="status-hadir" class="status-btn">Hadir</label>
+
+                <input type="radio" id="status-izin" name="status" value="Izin">
+                <label for="status-izin" class="status-btn">Izin</label>
+
+                <input type="radio" id="status-sakit" name="status" value="Sakit">
+                <label for="status-sakit" class="status-btn">Sakit</label>
+            </div>
+        </div>
+
+        <button class="submit-btn" id="btn-kirim" onclick="kirimAbsen()">Kirim Absen Sekarang</button>
     </div>
 
     <script>
         async function kirimAbsen() {
-            // GANTI TEKS DI BAWAH INI DENGAN URL DARI GOOGLE APPS SCRIPT ANDA
+            // GANTI DENGAN URL APPS SCRIPT ANDA
             const scriptURL = 'https://script.google.com/macros/s/AKfycbyFZihiiQBFX6ZhWHthEXTfecfpVUYc4MVHHLS-afVJZ9TmQQyO3bP_CupIn8ePsbY/exec'; 
             
             const nama = document.getElementById('nama').value;
-            const status = document.getElementById('status').value;
-            const btnSubmit = document.getElementById('btnSubmit');
+            const statusRadio = document.querySelector('input[name="status"]:checked');
+            const btnKirim = document.getElementById('btn-kirim');
 
-            if(!nama) return alert('Silakan pilih nama terlebih dahulu!');
-
-            // Ubah tombol saat proses pengiriman
-            btnSubmit.innerHTML = "Mengirim...";
-            btnSubmit.disabled = true;
-
-            const data = {
-                nama: nama,
-                status: status
-            };
-
-            try {
-                await fetch(scriptURL, {
-                    method: 'POST',
-                    body: JSON.stringify(data)
-                });
-                alert('Terima kasih, absen berhasil dicatat!');
-                document.getElementById('nama').value = ''; // Reset pilihan nama
-            } catch (error) {
-                alert('Terjadi kesalahan, silakan coba lagi.');
-            } finally {
-                // Kembalikan tombol seperti semula
-                btnSubmit.innerHTML = "Kirim Kehadiran";
-                btnSubmit.disabled = false;
+            // Validasi input
+            if(!nama) {
+                alert('Mohon pilih nama Anda terlebih dahulu!');
+                return;
             }
-        }
-    </script>
-</body>
-</html>
+            if(!statusRadio) {
+                alert('Mohon pilih status
